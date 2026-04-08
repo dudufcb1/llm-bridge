@@ -23,8 +23,15 @@ app.post("/", async (c) => {
 
   consola.info(`[chat-completions] model=${openaiPayload.model} stream=${openaiPayload.stream ?? false}`)
 
-  const anthropicPayload = translateToAnthropic(openaiPayload)
-  const result = await callAnthropic(anthropicPayload, config.targetBaseUrl, config.targetApiKey)
+  let result: Awaited<ReturnType<typeof callAnthropic>>
+  try {
+    const anthropicPayload = translateToAnthropic(openaiPayload)
+    result = await callAnthropic(anthropicPayload, config.targetBaseUrl, config.targetApiKey)
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error)
+    consola.error(`[chat-completions] upstream error: ${msg}`)
+    return c.json({ error: { message: msg, type: "api_error" } }, 500)
+  }
 
   // Non-streaming
   if (!openaiPayload.stream) {

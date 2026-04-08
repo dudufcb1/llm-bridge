@@ -18,8 +18,15 @@ app.post("/", async (c) => {
 
   consola.info(`[messages] model=${anthropicPayload.model} stream=${anthropicPayload.stream ?? false}`)
 
-  const openaiPayload = translateToOpenAI(anthropicPayload)
-  const result = await callOpenAI(openaiPayload, config.targetBaseUrl, config.targetApiKey)
+  let result: Awaited<ReturnType<typeof callOpenAI>>
+  try {
+    const openaiPayload = translateToOpenAI(anthropicPayload)
+    result = await callOpenAI(openaiPayload, config.targetBaseUrl, config.targetApiKey)
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error)
+    consola.error(`[messages] upstream error: ${msg}`)
+    return c.json({ type: "error", error: { type: "api_error", message: msg } }, 500)
+  }
 
   // Non-streaming
   if (!anthropicPayload.stream) {
