@@ -1,0 +1,19 @@
+{
+  "name": "llm-bridge",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/main.ts",
+    "start": "bun run src/main.ts"
+  },
+  "dependencies": {
+    "hono": "^4.7.10",
+    "fetch-event-stream": "^0.1.5",
+    "consola": "^3.4.2",
+    "citty": "^0.1.6"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.8.3"
+  }
+}
