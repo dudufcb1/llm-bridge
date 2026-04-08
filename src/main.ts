@@ -50,7 +50,8 @@ const main = defineCommand({
     consola.info(`  Target API key: ${config.targetApiKey ? "***" + config.targetApiKey.slice(-4) : "(none)"}`)
     consola.info("")
     consola.info("Endpoints:")
-    consola.info("  POST /v1/messages          (Anthropic format -> forwards to OpenAI)")
+    consola.info("  POST /v1/messages          (Anthropic format -> forwards to OpenAI Chat Completions)")
+    consola.info("  POST /v1/responses         (Anthropic format -> forwards to OpenAI Responses API)")
     consola.info("  POST /v1/chat/completions  (OpenAI format -> forwards to Anthropic)")
     consola.info("")
 

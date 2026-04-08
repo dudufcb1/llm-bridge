@@ -5,6 +5,7 @@ import consola from "consola"
 import { getConfig } from "~/lib/config"
 import messagesHandler from "~/routes/messages/handler"
 import chatCompletionsHandler from "~/routes/chat-completions/handler"
+import responsesHandler from "~/routes/responses/handler"
 
 export function createServer() {
   const config = getConfig()
@@ -27,9 +28,10 @@ export function createServer() {
   // Health check
   app.get("/health", (c) => c.json({ status: "ok", direction: config.direction }))
 
-  // Both directions always available
+  // All directions available
   app.route("/v1/messages", messagesHandler)
   app.route("/v1/chat/completions", chatCompletionsHandler)
+  app.route("/v1/responses", responsesHandler)
 
   // Models passthrough (minimal)
   app.get("/v1/models", (c) => {
