@@ -34,11 +34,18 @@ export function translateChunkToAnthropicEvents(
   const choice = chunk.choices[0]
   const { delta } = choice
 
+  // Some providers (Kimi/NVIDIA) use delta.reasoning instead of delta.content
+  const effectiveDelta = { ...delta }
+  if (!effectiveDelta.content && effectiveDelta.reasoning) {
+    effectiveDelta.content = effectiveDelta.reasoning
+    effectiveDelta.reasoning = null
+  }
+
   handleMessageStart(state, events, chunk)
-  handleThinkingText(delta, state, events)
-  handleContent(delta, state, events)
-  handleToolCalls(delta, state, events)
-  handleFinish(choice, state, { events, chunk })
+  handleThinkingText(effectiveDelta, state, events)
+  handleContent(effectiveDelta, state, events)
+  handleToolCalls(effectiveDelta, state, events)
+  handleFinish({ ...choice, delta: effectiveDelta }, state, { events, chunk })
 
   return events
 }

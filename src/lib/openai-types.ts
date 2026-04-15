@@ -37,6 +37,7 @@ export interface Delta {
   }>
   reasoning_text?: string | null
   reasoning_opaque?: string | null
+  reasoning?: string | null // Kimi/NVIDIA uses this field instead of content
 }
 
 export interface Choice {
@@ -70,6 +71,7 @@ interface ResponseMessage {
   content: string | null
   reasoning_text?: string | null
   reasoning_opaque?: string | null
+  reasoning?: string | null // Kimi/NVIDIA uses this field instead of content
   tool_calls?: Array<ToolCall>
 }
 

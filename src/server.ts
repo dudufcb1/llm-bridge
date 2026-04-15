@@ -33,11 +33,18 @@ export function createServer() {
   app.route("/v1/chat/completions", chatCompletionsHandler)
   app.route("/v1/responses", responsesHandler)
 
-  // Models passthrough (minimal)
+  // Models endpoint - return configured model
   app.get("/v1/models", (c) => {
     return c.json({
       object: "list",
-      data: [],
+      data: [
+        {
+          id: "moonshotai/kimi-k2.5",
+          object: "model",
+          created: 1700000000,
+          owned_by: "moonshotai",
+        },
+      ],
     })
   })
 

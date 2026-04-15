@@ -272,7 +272,9 @@ export function translateToAnthropic(
   let stopReason = response.choices[0]?.finish_reason ?? null
 
   for (const choice of response.choices) {
-    const textBlocks = getAnthropicTextBlocks(choice.message.content)
+    // Some providers (Kimi/NVIDIA) put text in `reasoning` instead of `content`
+    const effectiveContent = choice.message.content ?? choice.message.reasoning ?? null
+    const textBlocks = getAnthropicTextBlocks(effectiveContent)
     const thinkBlocks = getAnthropicThinkBlocks(
       choice.message.reasoning_text,
       choice.message.reasoning_opaque,
